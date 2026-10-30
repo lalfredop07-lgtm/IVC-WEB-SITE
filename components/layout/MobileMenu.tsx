@@ -56,7 +56,7 @@ export function MobileMenu({ open, onClose, homeSection, toggle }: Props) {
     stop();
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
-    const t = window.setTimeout(() => firstLink.current?.focus(), 300);
+    const t = window.setTimeout(() => firstLink.current?.focus({ preventScroll: true }), 300);
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
     window.addEventListener("keydown", onKey);
     return () => {
