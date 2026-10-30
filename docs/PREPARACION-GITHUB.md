@@ -13,7 +13,7 @@ Revisado antes de subir:
 - Sin secretos: búsqueda de claves y tokens en todo el código; solo marcadores de ejemplo en `docs/`.
 - `.env.example` sin valores reales.
 - Sin cachés ni artefactos de compilación.
-- **A decidir por IVC/Alfi:** `docs/referencias-diseno/` contiene dos capturas de webs de **otras empresas**, usadas solo como referencia. No se publican en la web, pero si el repositorio fuera público convendría excluirlas o dejar el repositorio privado. **Recomendación: repositorio privado.**
+- Las capturas de referencia de otras empresas (`docs/referencias-diseno/`) **no se incluyen en este paquete**. Aun así, se recomienda un repositorio privado hasta que IVC valide el contenido.
 
 ## Compilación desde una instalación limpia (verificada)
 
@@ -29,7 +29,7 @@ Resultado (27/10/2026): 150 archivos copiados; `npm ci` correcto en 6,7 s; `npm 
 ## Subirlo (cuando se autorice)
 
 ```bash
-cd web
+# (el package.json está en la raíz de este paquete)
 git add -A
 git commit -m "Web IVC: fases 1–3"
 git branch -M main

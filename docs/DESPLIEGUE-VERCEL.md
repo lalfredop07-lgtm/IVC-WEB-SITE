@@ -10,7 +10,7 @@
 | Node.js | `>=20.9.0` (campo `engines`). Probado en local con Node 24.21. En Vercel: **22.x o 24.x** |
 | Instalación | `npm ci` (hay `package-lock.json`) |
 | Compilación | `npm run build` → 40 rutas estáticas + 2 funciones (`/api/contacto`, `/api/postulacion`) |
-| Directorio raíz del proyecto en Vercel | `web` (si el repositorio incluye la carpeta superior del paquete) |
+| Directorio raíz del proyecto en Vercel | **`./`** (en este paquete `package.json` está en la raíz; no hay que cambiarlo) |
 | Imágenes | `next/image` con AVIF/WebP, caché de 31 días; 40 fotografías de origen (20 originales + 20 mejoradas) |
 | Fuentes | Montserrat y DM Sans autoalojadas por `next/font` (sin peticiones a Google en tiempo de ejecución) |
 | `vercel.json` | No es necesario |
@@ -45,8 +45,8 @@ Recomendación adicional para staging: mantener activada la **Vercel Deployment 
 
 ## 4. Pasos de despliegue (cuando se autorice)
 
-1. Crear el repositorio **privado** en GitHub y subir el contenido de `web/` (ver `PREPARACION-GITHUB.md`).
-2. En Vercel: *Add New → Project → Import* el repositorio. Framework: Next.js. Root directory: `web` si procede.
+1. Crear el repositorio **privado** en GitHub y subir el contenido de esta carpeta (`package.json` en la raíz del repositorio) (ver `PREPARACION-GITHUB.md`).
+2. En Vercel: *Add New → Project → Import* el repositorio. Framework: Next.js. Root Directory: dejar `./` (sin cambios).
 3. Configurar las variables de la tabla anterior (sin `SITE_INDEXABLE`).
 4. Desplegar. Se obtiene una URL `*.vercel.app` de revisión, no indexable.
 5. Revisar en la URL de Vercel: rutas, formularios (deben mostrar «no activado»), cabeceras (`curl -I`), `robots.txt`.

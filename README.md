@@ -7,7 +7,6 @@ Next.js 16 (App Router) · TypeScript · Tailwind CSS 4 · GSAP + ScrollTrigger 
 ## Comandos
 
 ```bash
-cd web
 npm ci             # instalación limpia (Node >= 20.9)
 npm run dev        # http://localhost:3000
 npm run build      # compilación de producción

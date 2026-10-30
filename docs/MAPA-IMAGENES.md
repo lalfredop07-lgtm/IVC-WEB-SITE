@@ -54,4 +54,4 @@ En el código, cada fotografía de obra es un `ProjectPhoto` (`data/projects.ts`
 |---|---|---|
 | `public/brand/logo-ivc.png` | Logo oficial (229 × 101), idéntico byte a byte a `assets/logo/LOGO-OFICIAL-IVC-USAR-ESTE.png` | Nunca se recolorea ni deforma |
 | `app/icon.png`, `app/apple-icon.png` | Derivados del logo completo sobre `#00284A` | Pendiente de isotipo oficial |
-| `docs/referencias-diseno/*.png` | Capturas de **otras empresas** usadas como referencia de diseño | No se publican en la web. Valorar no incluirlas en un repositorio público |
+| _(las capturas de referencia de otras empresas no se incluyen en este paquete)_ | — | — |
