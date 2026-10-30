@@ -12,8 +12,7 @@ import { IconArrowRight, IconArrowUpRight, IconHelmet, IconPin } from "@/compone
 
 export const APPLY_EVENT = "ivc:apply";
 
-// Los ejemplos de diseño se muestran solo en desarrollo; en producción esta constante es false.
-const DEV_PREVIEW = process.env.NODE_ENV !== "production";
+// Mientras IVC no confirme vacantes, se muestran perfiles de ejemplo (cada tarjeta lleva la etiqueta «Ejemplo ficticio»).
 const ease = [0.16, 1, 0.3, 1] as const;
 
 const fmtDate = formatJobDate;
@@ -30,7 +29,7 @@ export function JobBoard() {
   const [specialty, setSpecialty] = useState("todas");
   const [open, setOpen] = useState<string | null>(null);
 
-  const source = DEV_PREVIEW ? exampleJobs : publishedJobs;
+  const source = useMemo(() => [...publishedJobs, ...exampleJobs], []);
   const locations = useMemo(() => [...new Set(source.map((j) => j.location))].sort(), [source]);
   const specs = useMemo(() => [...new Set(source.map((j) => j.specialty))], [source]);
   const list = source.filter((j) => (location === "todas" || j.location === location) && (specialty === "todas" || j.specialty === specialty));
@@ -69,11 +68,11 @@ export function JobBoard() {
               <span className="h-px w-8 bg-blue" /> 02 — Ofertas laborales
             </p>
             <SplitReveal as="h2" id="ofertas-title" variant="chars" stagger={0.012} className="mt-6 text-[clamp(2.2rem,4.6vw,4.2rem)] font-semibold leading-[1] text-navy">
-              Vacantes publicadas
+              Oportunidades en IVC
             </SplitReveal>
           </div>
           <p className="text-[15px] leading-relaxed text-muted lg:col-span-5">
-            Solo se publican vacantes confirmadas por IVC, con su fecha de publicación. Puede filtrar por ubicación y especialidad.
+            Conozca los perfiles que buscamos y filtre por ubicación y especialidad.
           </p>
         </div>
 
@@ -89,7 +88,7 @@ export function JobBoard() {
             all="Todas las especialidades"
           />
           <p className="px-3 text-sm text-muted md:ml-auto" aria-live="polite">
-            {empty ? "0 vacantes publicadas" : `${list.length} ${list.length === 1 ? "vacante" : "vacantes"}`}
+            {empty ? "0 vacantes" : `${list.length} ${list.length === 1 ? "vacante" : "vacantes"}`}
           </p>
         </div>
 

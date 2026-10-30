@@ -94,3 +94,9 @@ Fuentes consultadas el 27/10/2026: brief del paquete y páginas oficiales `ivcco
 - [ ] **Prueba en dispositivos físicos**: la auditoría se hizo con emulación en Chrome (320, 360, 375, 402, 430 y 768 px, vertical y horizontal). Falta verificar en un iPhone real con Safari (barra inferior, área segura, arrastre del comparador antes/después, carrusel de obras) y en un Android de gama media.
 - [ ] **LCP móvil 3,6–5,3 s** en Lighthouse (Moto G simulado, 4G lenta): lo marca la entrada cinematográfica aprobada (pantalla de carga + revelado del titular). CLS 0, peso 470–640 KB. Si IVC prioriza la velocidad, se puede acortar la entrada en móvil.
 
+
+## Ofertas laborales de ejemplo (decisión del 30/10/2026)
+
+- Por indicación de Alfi, la sección «Oportunidades en IVC» de `/trabaja-con-nosotros` muestra **5 perfiles de ejemplo** (`data/jobs.example.ts`) también en producción, y ya no aparece el mensaje «no hay ofertas publicadas».
+- Cada tarjeta y ficha mantiene la etiqueta **«Ejemplo ficticio»**; las fichas llevan `noindex`, no tienen datos estructurados `JobPosting` y no entran en el sitemap.
+- **Antes del lanzamiento:** sustituir los ejemplos por vacantes reales confirmadas por IVC (`data/jobs.ts`) o retirarlos, para no presentar puestos inexistentes como ofertas reales.

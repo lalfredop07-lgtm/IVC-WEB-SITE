@@ -9,16 +9,14 @@ import { ApplySection } from "@/components/careers/ApplySection";
 import { absoluteUrl, breadcrumbJsonLd, jsonLd, pageMetadata } from "@/lib/seo";
 import { SITE_URL } from "@/lib/env";
 
-// Solo existen fichas de vacantes aprobadas por IVC. En `npm run dev` también se
-// generan las de los ejemplos ficticios para revisar el diseño; nunca en producción.
-const DEV_PREVIEW = process.env.NODE_ENV !== "production";
-const findJob = (slug: string): Job | undefined =>
-  publishedJobBySlug(slug) ?? (DEV_PREVIEW ? exampleJobs.find((j) => j.slug === slug) : undefined);
+// Además de las vacantes aprobadas por IVC se generan las fichas de los ejemplos ficticios
+// (marcados «Ejemplo ficticio»): llevan noindex, sin datos estructurados y fuera del sitemap.
+const findJob = (slug: string): Job | undefined => publishedJobBySlug(slug) ?? exampleJobs.find((j) => j.slug === slug);
 
 export const dynamicParams = false;
 
 export function generateStaticParams() {
-  return [...publishedJobs, ...(DEV_PREVIEW ? exampleJobs : [])].map((j) => ({ slug: j.slug }));
+  return [...publishedJobs, ...exampleJobs].map((j) => ({ slug: j.slug }));
 }
 
 export async function generateMetadata({ params }: PageProps<"/trabaja-con-nosotros/[slug]">): Promise<Metadata> {

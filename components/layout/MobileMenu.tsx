@@ -5,13 +5,16 @@ import { useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 import { isNavActive, mainNav, secondaryNav } from "@/data/navigation";
 import { site } from "@/data/site";
-import { specialties } from "@/data/specialties";
 import { TransitionLink } from "@/components/motion/PageTransition";
 import { useSmoothScroll } from "@/components/motion/SmoothScroll";
 import { IconArrowUpRight } from "@/components/ui/Icons";
 import { useFocusTrap } from "@/lib/useFocusTrap";
 
 const ease = [0.76, 0, 0.24, 1] as const;
+
+// Menú móvil: «Trabaja con nosotros» es la opción 05 y «Contacto» el botón blanco.
+const contactItem = mainNav[mainNav.length - 1];
+const menuItems = [...mainNav.slice(0, 4), ...secondaryNav, ...mainNav.slice(4, -1)];
 
 const panel: Variants = {
   closed: { clipPath: "circle(0% at calc(100% - 44px) 44px)", transition: { duration: 0.7, ease } },
@@ -78,11 +81,11 @@ export function MobileMenu({ open, onClose, homeSection, toggle }: Props) {
           initial="closed"
           animate="open"
           exit="closed"
-          className="fixed inset-0 z-40 flex flex-col overflow-y-auto overscroll-contain bg-navy-950 px-[var(--gutter)] pb-[max(2.5rem,env(safe-area-inset-bottom))] pt-28 text-white lg:hidden"
+          className="fixed inset-x-0 top-0 z-40 flex h-[100dvh] min-h-[100svh] flex-col overflow-y-auto overscroll-contain bg-navy-950 px-[var(--gutter)] pb-[max(2.5rem,env(safe-area-inset-bottom))] pt-24 text-white lg:hidden"
         >
           <div aria-hidden="true" className="blueprint-grid pointer-events-none absolute inset-0 opacity-60" />
-          <motion.ul variants={list} className="relative flex flex-col gap-1">
-            {mainNav.map((n, i) => (
+          <motion.ul variants={list} className="relative flex flex-col gap-1 max-lg:my-auto">
+            {menuItems.map((n, i) => (
               <li key={n.href} className="overflow-hidden">
                 <motion.div variants={item} className="origin-left">
                   <TransitionLink
@@ -90,11 +93,11 @@ export function MobileMenu({ open, onClose, homeSection, toggle }: Props) {
                     href={n.href}
                     onClick={onClose}
                     aria-current={isNavActive(n, pathname, homeSection) ? "page" : undefined}
-                    className="group flex items-baseline gap-4 py-2"
+                    className="group flex items-baseline gap-4 py-1"
                   >
                     <span className="kicker w-6 text-sky/70">0{i + 1}</span>
                     <span
-                      className={`font-display text-[clamp(2.2rem,10vw,3.5rem)] font-semibold leading-none tracking-[-0.04em] transition-colors ${
+                      className={`font-display text-[clamp(1.9rem,8.6vw,3.2rem)] font-semibold leading-none tracking-[-0.04em] transition-colors ${
                         isNavActive(n, pathname, homeSection) ? "text-sky" : "text-white"
                       } group-active:text-sky`}
                     >
@@ -106,49 +109,28 @@ export function MobileMenu({ open, onClose, homeSection, toggle }: Props) {
             ))}
           </motion.ul>
 
-          <motion.div variants={fade} className="relative mt-8">
-            {secondaryNav.map((n) => (
-              <TransitionLink
-                key={n.href}
-                href={n.href}
-                onClick={onClose}
-                aria-current={isNavActive(n, pathname, homeSection) ? "page" : undefined}
-                className={`inline-flex min-h-12 items-center gap-2 rounded-full px-5 py-3 text-[14px] font-semibold transition-colors ${
-                  isNavActive(n, pathname, homeSection) ? "bg-sky text-navy" : "bg-white text-navy active:bg-sky"
-                }`}
-              >
-                {n.label}
-                <IconArrowUpRight size={15} />
-              </TransitionLink>
-            ))}
+          <motion.div variants={fade} className="relative mt-6">
+            <TransitionLink
+              href={contactItem.href}
+              onClick={onClose}
+              aria-current={isNavActive(contactItem, pathname, homeSection) ? "page" : undefined}
+              className={`inline-flex min-h-12 items-center gap-2 rounded-full px-6 py-3 text-[15px] font-semibold transition-colors ${
+                isNavActive(contactItem, pathname, homeSection) ? "bg-sky text-navy" : "bg-white text-navy active:bg-sky"
+              }`}
+            >
+              {contactItem.label}
+              <IconArrowUpRight size={15} />
+            </TransitionLink>
           </motion.div>
 
-          <motion.div variants={fade} className="relative mt-8 border-t border-white/10 pt-6">
-            <p className="kicker mb-4 text-white/60">Especialidades</p>
-            <ul className="flex flex-wrap gap-2">
-              {specialties.map((s) => (
-                <li key={s.slug}>
-                  <TransitionLink
-                    href={`/especialidades/${s.slug}`}
-                    onClick={onClose}
-                    className="inline-flex min-h-11 items-center gap-1.5 rounded-full px-4 text-[14px] ring-1 ring-inset ring-white/15 transition-colors active:bg-white/10"
-                  >
-                    {s.shortName}
-                    <IconArrowUpRight size={14} />
-                  </TransitionLink>
-                </li>
-              ))}
-            </ul>
-          </motion.div>
-
-          <motion.div variants={fade} className="relative mt-auto pt-10 text-sm text-white/65">
+          <motion.div variants={fade} className="relative mt-auto pt-4 text-sm text-white/65">
             <a href={`mailto:${site.contact.email}`} className="flex min-h-11 items-center text-lg text-white">
               {site.contact.email}
             </a>
             <a href={`tel:${site.contact.phoneHrefs[0]}`} className="flex min-h-11 items-center text-[15px]">
               {site.contact.phones[0]}
             </a>
-            <p className="title-accent mt-6 text-2xl text-sky">{site.slogan}</p>
+            <p className="title-accent mt-2 text-2xl text-sky">{site.slogan}</p>
           </motion.div>
           {/* Cierre para lectores de pantalla (con aria-modal el botón del header queda fuera del diálogo). */}
           <button type="button" onClick={onClose} className="sr-only focus:not-sr-only focus:mt-6 focus:self-start focus:rounded-full focus:bg-white focus:px-5 focus:py-3 focus:text-sm focus:font-semibold focus:text-navy">
