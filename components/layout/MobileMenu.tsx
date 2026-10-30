@@ -4,7 +4,6 @@ import { AnimatePresence, motion, type Variants } from "motion/react";
 import { useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 import { isNavActive, mainNav, secondaryNav } from "@/data/navigation";
-import { site } from "@/data/site";
 import { TransitionLink } from "@/components/motion/PageTransition";
 import { useSmoothScroll } from "@/components/motion/SmoothScroll";
 import { IconArrowUpRight } from "@/components/ui/Icons";
@@ -12,9 +11,9 @@ import { useFocusTrap } from "@/lib/useFocusTrap";
 
 const ease = [0.76, 0, 0.24, 1] as const;
 
-// Menú móvil: «Trabaja con nosotros» es la opción 05 y «Contacto» el botón blanco.
+// Menú móvil: «Trabaja con nosotros» es la opción 06 y «Contacto» el botón blanco.
 const contactItem = mainNav[mainNav.length - 1];
-const menuItems = [...mainNav.slice(0, 4), ...secondaryNav, ...mainNav.slice(4, -1)];
+const menuItems = [...mainNav.slice(0, -1), ...secondaryNav];
 
 const panel: Variants = {
   closed: { clipPath: "circle(0% at calc(100% - 44px) 44px)", transition: { duration: 0.7, ease } },
@@ -84,7 +83,7 @@ export function MobileMenu({ open, onClose, homeSection, toggle }: Props) {
           className="fixed inset-x-0 top-0 z-40 flex h-[100dvh] min-h-[100svh] flex-col overflow-y-auto overscroll-contain bg-navy-950 px-[var(--gutter)] pb-[max(2.5rem,env(safe-area-inset-bottom))] pt-24 text-white lg:hidden"
         >
           <div aria-hidden="true" className="blueprint-grid pointer-events-none absolute inset-0 opacity-60" />
-          <motion.ul variants={list} className="relative flex flex-col gap-1 max-lg:my-auto">
+          <motion.ul variants={list} className="relative flex flex-col gap-2 max-lg:mt-auto">
             {menuItems.map((n, i) => (
               <li key={n.href} className="overflow-hidden">
                 <motion.div variants={item} className="origin-left">
@@ -93,11 +92,11 @@ export function MobileMenu({ open, onClose, homeSection, toggle }: Props) {
                     href={n.href}
                     onClick={onClose}
                     aria-current={isNavActive(n, pathname, homeSection) ? "page" : undefined}
-                    className="group flex items-baseline gap-4 py-1"
+                    className="group flex items-baseline gap-4 py-2.5"
                   >
                     <span className="kicker w-6 text-sky/70">0{i + 1}</span>
                     <span
-                      className={`font-display text-[clamp(1.9rem,8.6vw,3.2rem)] font-semibold leading-none tracking-[-0.04em] transition-colors ${
+                      className={`font-display text-[clamp(2rem,9vw,3.3rem)] font-semibold leading-none tracking-[-0.04em] transition-colors ${
                         isNavActive(n, pathname, homeSection) ? "text-sky" : "text-white"
                       } group-active:text-sky`}
                     >
@@ -109,7 +108,7 @@ export function MobileMenu({ open, onClose, homeSection, toggle }: Props) {
             ))}
           </motion.ul>
 
-          <motion.div variants={fade} className="relative mt-6">
+          <motion.div variants={fade} className="relative mb-auto mt-10">
             <TransitionLink
               href={contactItem.href}
               onClick={onClose}
@@ -123,15 +122,6 @@ export function MobileMenu({ open, onClose, homeSection, toggle }: Props) {
             </TransitionLink>
           </motion.div>
 
-          <motion.div variants={fade} className="relative mt-auto pt-4 text-sm text-white/65">
-            <a href={`mailto:${site.contact.email}`} className="flex min-h-11 items-center text-lg text-white">
-              {site.contact.email}
-            </a>
-            <a href={`tel:${site.contact.phoneHrefs[0]}`} className="flex min-h-11 items-center text-[15px]">
-              {site.contact.phones[0]}
-            </a>
-            <p className="title-accent mt-2 text-2xl text-sky">{site.slogan}</p>
-          </motion.div>
           {/* Cierre para lectores de pantalla (con aria-modal el botón del header queda fuera del diálogo). */}
           <button type="button" onClick={onClose} className="sr-only focus:not-sr-only focus:mt-6 focus:self-start focus:rounded-full focus:bg-white focus:px-5 focus:py-3 focus:text-sm focus:font-semibold focus:text-navy">
             Cerrar menú
