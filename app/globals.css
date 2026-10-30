@@ -1,0 +1,190 @@
+@import "tailwindcss";
+
+
+/* ───────────────────────── Tokens ─────────────────────────
+   #00284A azul corporativo observado (prioritario).
+   El resto son propuestas sujetas al manual de marca de IVC. */
+@theme {
+  --color-navy-950: #00121f;
+  --color-navy-900: #001b31;
+  --color-navy: #00284a;
+  --color-navy-700: #063a63;
+  --color-blue: #07528a;
+  --color-blue-400: #4f97cf;
+  --color-sky: #a7cfe6;
+  --color-paper: #f4f6f8;
+  --color-ink: #172c3d;
+  --color-muted: #566676;
+  --color-line: #dde5eb;
+
+  --font-display: var(--font-montserrat), "Montserrat", system-ui, sans-serif;
+  --font-sans: var(--font-dm-sans), "DM Sans", system-ui, sans-serif;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+:root {
+  /* viewport-fit=cover: en horizontal el margen lateral nunca invade la muesca del iPhone. */
+  --gutter: max(clamp(20px, 5vw, 72px), env(safe-area-inset-left, 0px), env(safe-area-inset-right, 0px));
+  --header-h: 84px;
+  color-scheme: light;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+  /* Evita el desplazamiento lateral accidental en Safari iOS (overflow en body no basta). */
+  overflow-x: clip;
+}
+
+body {
+  background: #fff;
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  overflow-x: clip;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+}
+
+p { text-wrap: pretty; }
+
+/* Diseño sin cursivas: se neutraliza cualquier estilo itálico por defecto o sintetizado. */
+*, *::before, *::after { font-synthesis-style: none; }
+em, i, cite, dfn, var, address, blockquote, q { font-style: normal; }
+.hero-italic { font-synthesis-style: auto; }
+
+::selection { background: var(--color-navy); color: #fff; }
+
+:focus-visible {
+  outline: 2px solid var(--color-blue-400);
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
+/* ───────────────────────── Layout helpers ───────────────────────── */
+@utility container-x {
+  width: 100%;
+  max-width: 1440px;
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+@utility kicker {
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+
+/* Acento tipográfico recto: misma familia que los titulares (Montserrat) en peso
+   ligero y color corporativo. El contraste se logra con peso y color, nunca con cursiva. */
+@utility title-accent {
+  font-family: var(--font-display);
+  font-style: normal;
+  font-weight: 300;
+  letter-spacing: -0.045em;
+}
+
+/* Excepción aprobada: palabra «bienestar.» del hero de la Home (composición original). */
+@utility hero-italic {
+  font-family: var(--font-hero-italic), "Instrument Serif", Georgia, serif;
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+}
+
+/* Logo oficial: nunca se recolorea ni se deforma. Solo se escala proporcionalmente. */
+.brand-logo { height: auto; object-fit: contain; }
+
+/* ───────────────────────── Estados iniciales de animación ─────────────────────────
+   Solo se ocultan cuando hay JS y el usuario no pidió reducir movimiento,
+   para evitar parpadeos antes de la hidratación. En la primera visita la pantalla
+   de entrada ya cubre la portada, así que el texto se pinta desde el primer
+   fotograma (debajo de las columnas) y GSAP toma el control al revelarlo. */
+@media (prefers-reduced-motion: no-preference) {
+  html.js.intro-seen [data-intro] { visibility: hidden; }
+
+  /* Primera mitad de la pantalla de entrada en CSS: arranca con el primer pintado,
+     sin esperar a que se descargue e hidrate el JavaScript (mismas curvas que GSAP). */
+  html.js:not(.intro-seen) [data-pl-logo] { animation: pl-logo 1.1s cubic-bezier(0.16, 1, 0.3, 1) both; }
+  html.js:not(.intro-seen) [data-pl-bar] { animation: pl-bar 1.2s cubic-bezier(0.45, 0, 0.55, 1) 0.1s both; }
+  html.js:not(.intro-seen) [data-pl-meta] { animation: pl-meta 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both; }
+  html.js:not(.intro-seen) [data-pl-meta-2] { animation-delay: 0.28s; }
+}
+/* Sin JavaScript, o si ya se vio en la sesión, la pantalla de entrada no se muestra. */
+html:not(.js) [data-preloader],
+html.intro-seen [data-preloader] { display: none; }
+
+@keyframes pl-logo { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
+@keyframes pl-bar { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@keyframes pl-meta { from { transform: translateY(120%); opacity: 0; } to { transform: none; opacity: 1; } }
+
+/* SplitText: máscaras de línea sin recortar descendentes. */
+.split-line { padding-bottom: 0.08em; margin-bottom: -0.08em; }
+
+/* Grano fotográfico sutil para dar profundidad cinematográfica. */
+.grain::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.07;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Retícula técnica (planos de ingeniería) */
+.blueprint-grid {
+  background-image:
+    linear-gradient(to right, rgb(255 255 255 / 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(255 255 255 / 0.05) 1px, transparent 1px);
+  background-size: 96px 96px;
+}
+
+/* Contorno de texto para el marquee de valores */
+.text-outline {
+  color: transparent;
+  -webkit-text-stroke: 1px currentColor;
+}
+.text-outline-navy { -webkit-text-stroke-color: rgb(0 40 74 / 0.35); }
+
+/* Botones táctiles: sin hover pegajoso en pantallas táctiles */
+@media (hover: none) {
+  .hover-only { display: none !important; }
+}
+
+/* ───────────────────────── Movimiento reducido ───────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Entrada de contenido que cambia (dial de Compromiso, estados de formulario) */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes spin-slow { to { transform: rotate(360deg); } }
+
+/* Móvil: las etiquetas en mayúsculas nunca bajan de 11 px (legibilidad en pantallas pequeñas).
+   En la capa de utilidades, con dos clases, para imponerse a text-[9px] / text-[10px]. */
+@layer utilities {
+  @media (max-width: 767px) {
+    .kicker.text-\[9px\],
+    .kicker.text-\[10px\] { font-size: 11px; letter-spacing: 0.18em; }
+  }
+}
